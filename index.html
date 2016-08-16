@@ -1,0 +1,29 @@
+<html>
+	<head>
+	  <title>PROA Maraton</title>
+	  <meta charset="utf-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+	  <!--<link rel="stylesheet" href="css/bootstrap.min.css">-->
+	  <script src="js/angular.min.js"></script>
+	  <script src="js/app.js"></script>
+	</head>
+
+
+	<body ng-app="myApp" ng-controller="ctrlMain">
+		<div class="jumbotron text-center">
+		    <h1>Proa Maraton</h1>
+		</div>
+		<div class="container" >
+			<div>{{ elapsed }}</div>
+			<button type="button" class="col-xs-4 btn btn-default btn-lg" ng-click="comenzar()">Largar...</button>
+			<button type="button" class="col-xs-4 btn btn-default btn-lg" ng-click="nuevaLlegada()">Nueva Llegada</button>
+		</div>
+
+		<ol>
+			<li ng-repeat="llegada in llegadas">
+				<span>"{{ llegada.elapsed }}"</span>
+				<input ng-model="llegada.name"></input>
+			</li>
+		</ol>
+	</body>
+</html>
