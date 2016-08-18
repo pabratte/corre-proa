@@ -1,0 +1,12 @@
+{
+  "name": "corre-proa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "author": "pabratte",
+  "window": {
+    "toolbar": true,
+    "width": 1000,
+    "height": 600
+  }
+}

@@ -1,29 +1,57 @@
 <html>
 	<head>
-	  <title>PROA Maraton</title>
+	  <title>Corre PROA</title>
 	  <meta charset="utf-8">
 	  <meta name="viewport" content="width=device-width, initial-scale=1">
 	  <!--<link rel="stylesheet" href="css/bootstrap.min.css">-->
+		<link rel="stylesheet" href="css/style.css">-->
 	  <script src="js/angular.min.js"></script>
 	  <script src="js/app.js"></script>
 	</head>
 
 
 	<body ng-app="myApp" ng-controller="ctrlMain">
-		<div class="jumbotron text-center">
-		    <h1>Proa Maraton</h1>
-		</div>
-		<div class="container" >
-			<div>{{ elapsed }}</div>
-			<button type="button" class="col-xs-4 btn btn-default btn-lg" ng-click="comenzar()">Largar...</button>
-			<button type="button" class="col-xs-4 btn btn-default btn-lg" ng-click="nuevaLlegada()">Nueva Llegada</button>
-		</div>
+		<header>
+			<div class="jumbotron text-center">
+			    <h1>Corre Proa</h1>
+			</div>
+		</header>
+		<section id="section_participantes">
+			seccion participantes
+			<div class="form_nuevo_participante">
+				<form>
+					<input ng-model="nuevo_participante_nombre" />
+					<button ng-click="agregarParticipante()">Nuevo</button>
+				</form>
+			</div>
 
-		<ol>
-			<li ng-repeat="llegada in llegadas">
-				<span>"{{ llegada.elapsed }}"</span>
-				<input ng-model="llegada.name"></input>
-			</li>
-		</ol>
+			<div class="lista_participantes">
+				<ol>
+					<li ng-repeat="participante in participantes track by $index">
+						<span>{{ participante.nombre }} {{ participante.nro}}</span>
+					</li>
+				</ol>
+			</div>
+
+			<div id="ultimo_participante">
+				Último participante agregado: {{ nuevoParticipante.nombre }} {{ nuevoParticipante.nro }}
+			</div>
+		</section>
+
+		<section id="section_corre">
+			seccion correr
+			<div class="container" >
+				<div>{{ elapsed }}</div>
+				<button type="button" class="col-xs-4 btn btn-default btn-lg" ng-click="comenzar()">Largar...</button>
+				<button type="button" class="col-xs-4 btn btn-default btn-lg" ng-click="nuevaLlegada()">Nueva Llegada</button>
+			</div>
+
+			<ol>
+				<li ng-repeat="llegada in llegadas">
+					<span>"{{ llegada.elapsed }}"</span>
+					<input ng-model="llegada.name"></input>
+				</li>
+			</ol>
+		</section>
 	</body>
 </html>
