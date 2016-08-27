@@ -3,8 +3,9 @@
 	  <title>Corre PROA</title>
 	  <meta charset="utf-8">
 	  <meta name="viewport" content="width=device-width, initial-scale=1">
-	  <!--<link rel="stylesheet" href="css/bootstrap.min.css">-->
-		<link rel="stylesheet" href="css/style.css">-->
+	  <link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="css/font-awesome.min.css">
 	  <script src="js/angular.min.js"></script>
 	  <script src="js/app.js"></script>
 	</head>
@@ -12,33 +13,91 @@
 
 	<body ng-app="myApp" ng-controller="ctrlMain">
 		<header>
-			<div class="jumbotron text-center">
-			    <h1>Corre Proa</h1>
-			</div>
+			<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+	      <a class="navbar-brand">Corre Proa 2016</a>
+				<ul class="nav navbar-nav">
+            <li ng-class="{'active': pestaniaActiva==1}" ng-click="activarPestania(1)"><a href="#">Participantes</a></li>
+            <li ng-class="{'active': pestaniaActiva==2}" ng-click="activarPestania(2)"><a href="#">Maratón</a></li>
+            <li ng-class="{'active': pestaniaActiva==3}" ng-click="activarPestania(3)"><a href="#">Estadísticas</a></li>
+        </ul>
+    	</div>
+		</nav>
 		</header>
-		<section id="section_participantes">
-			seccion participantes
-			<div class="form_nuevo_participante">
-				<form>
-					<input ng-model="nuevo_participante_nombre" />
-					<button ng-click="agregarParticipante()">Nuevo</button>
-				</form>
+
+		<section id="section_participantes" ng-show="pestaniaActiva == 1" class="container">
+			<div class ="col-md-6">
+				<div class="cuad_title">Registrar Participante</div>
+				<div class="cuad">
+					<form class="form">
+						<div class="form-group row">
+						  <label class="col-md-2 col-form-label">Número </label>
+						  <div class="col-md-10">
+								<span >{{ nuevoParticipante.nro }}</span>
+								<button type="button" ng-click="generarNuevoNroParticipante()" class="btn btn-default pull-right"><i class="fa fa-refresh" aria-hidden="true"></i>
+</button>
+						  </div>
+						</div>
+						<div class="form-group row" ng-class="{'has-error': nuevoParticipanteValido.apellido}" >
+						  <label for="apellido" class="col-md-2">Apellido </label>
+						  <div class="col-md-10">
+						    <input class="form-control" type="text" capitalize id="input-apellido" ng-model="nuevoParticipante.apellido">
+						  </div>
+						</div>
+						<div class="form-group row" ng-class="{'has-error': nuevoParticipanteValido.nombre}" >
+							<label for="apellido" class="col-md-2 col-form-label">Nombre </label>
+						  <div class="col-md-10">
+						    <input class="form-control" type="text" capitalize id="input-nombre" ng-model="nuevoParticipante.nombre">
+						  </div>
+						</div>
+
+						<div class="form-group row" ng-class="{'has-error': nuevoParticipanteValido.dni}" >
+						  <label for="apellido" class="col-md-2 col-form-label">DNI </label>
+						  <div class="col-md-10">
+						    <input class="form-control" type="text" id="input-dni" ng-model="nuevoParticipante.dni">
+						  </div>
+						</div>
+						<div class="form-group row">
+							<div class="col-md-12">
+								<button type="button" class="btn btn-default pull-right"  ng-click="agregarParticipante()">Registrar</button>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<br>
+				<div class="cuad_title">Último Participante Registrado</div>
+				<div class="cuad">
+					<div id="ultimo_participante">
+						{{ ultimoParticipanteRegistrado !== null ? ultimoParticipanteRegistrado.apellido+ ' '+ ultimoParticipanteRegistrado.nombre +' ('+ ultimoParticipanteRegistrado.nro +')':'' }}
+					</div>
+				</div>
+				</div>
+
+
+			<div class="col-md-6 lista_participantes" style="height: 100%;">
+				<div class="cuad_title">Lista de participantes</div>
+					<div class="cuad" style="overflow-y: auto; height: 90%;  padding: 0px;">
+						<table class="table table-striped" style="margin: 0px;">
+							<th>#</th>
+							<th>Apellido</th>
+							<th>Nombre</th>
+							<th>Número</th>
+							<tr ng-repeat="participante in participantes track by $index">
+								<td>{{ $index + 1}}</td>
+								<td>{{ participante.apellido }}</td>
+								<td>{{ participante.nombre }}</td>
+								<td>{{ participante.nro }}</td>
+							</tr>
+						</table>
+					</div>
+				</div>
 			</div>
 
-			<div class="lista_participantes">
-				<ol>
-					<li ng-repeat="participante in participantes track by $index">
-						<span>{{ participante.nombre }} {{ participante.nro}}</span>
-					</li>
-				</ol>
-			</div>
 
-			<div id="ultimo_participante">
-				Último participante agregado: {{ nuevoParticipante.nombre }} {{ nuevoParticipante.nro }}
-			</div>
 		</section>
 
-		<section id="section_corre">
+		<section id="section_corre" ng-show="pestaniaActiva == 2" class="container">
 			seccion correr
 			<div class="container" >
 				<div>{{ elapsed }}</div>

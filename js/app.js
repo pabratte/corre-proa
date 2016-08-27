@@ -1,13 +1,37 @@
 var app = angular.module('myApp', []);
-fs = require('fs');
+var fs = require('fs');
+
+app.directive('capitalize', function() {
+   return {
+     require: 'ngModel',
+     link: function(scope, element, attrs, modelCtrl) {
+        var capitalize = function(inputValue) {
+           if(inputValue == undefined) inputValue = '';
+           var capitalized = inputValue.toUpperCase();
+           if(capitalized !== inputValue) {
+              modelCtrl.$setViewValue(capitalized);
+              modelCtrl.$render();
+            }
+            return capitalized;
+         }
+         modelCtrl.$parsers.push(capitalize);
+         capitalize(scope[attrs.ngModel]);  // capitalize initial value
+     }
+   };
+});
 
 app.controller('ctrlMain', function($scope, $interval) {
     $scope.llegadas = [];
+    $scope.participantes = [];
+    $scope.nuevoParticipanteValido = {nombre: true, apellido: true, dni: true};
     $scope.horaComienzo;
     $scope.elapsed = "--"
-    $scope.nuevoParticipante = {nombre: '', nro: ''};
-    $scope.nuevo_participante_nombre = '';
+    $scope.ultimoParticipanteRegistrado = null;
+    $scope.pestaniaActiva = 1
 
+    $scope.activarPestania = function(p){
+      $scope.pestaniaActiva = p;
+    }
 
 
     $scope.comenzar = function(key){
@@ -29,21 +53,47 @@ app.controller('ctrlMain', function($scope, $interval) {
     }
 
     $scope.nuevaLlegada = function(){
-
       $scope.llegadas.push({elapsed: $scope.elapsed, name: ''});
       console.log($scope.llegadas)
     }
 
-    $scope.agregarParticipante = function(){
-      if($scope.nuevo_participante_nombre == '') return;
-      $scope.nuevoParticipante.nombre = $scope.nuevo_participante_nombre;
-      $scope.nuevoParticipante.nro = $scope.obtenerNuevoNroParticipante();
-      $scope.participantes.push({nombre: $scope.nuevoParticipante.nombre, nro: $scope.nuevoParticipante.nro});
-      $scope.nuevo_participante_nombre = '';
-      $scope.guardarParticipantes();
+    $scope.validarNuevoParticipante = function(){
+      $scope.nuevoParticipanteValido.nombre = $scope.nuevoParticipanteValido.apellido = $scope.nuevoParticipanteValido.dni = false;
+
+      if($scope.nuevoParticipante.apellido === ''){
+        $scope.nuevoParticipanteValido.apellido = true;
+        return false;
+      }else if($scope.nuevoParticipante.nombre === ''){
+        $scope.nuevoParticipanteValido.nombre = true;
+        return false;
+      }else if($scope.nuevoParticipante.dni === ''){
+        $scope.nuevoParticipanteValido.dni = true;
+        return false;
+      }else{
+        return true;
+      }
+
     }
 
-    $scope.obtenerNuevoNroParticipante = function(){
+    limpiarNuevoParticipante = function(){
+      $scope.nuevoParticipante = {apellido: '', nombre: '', dni: ''};
+      $scope.generarNuevoNroParticipante();
+      $scope.nuevoParticipanteValido.nombre = $scope.nuevoParticipanteValido.apellido = $scope.nuevoParticipanteValido.dni = false;
+    }
+
+    $scope.agregarParticipante = function(){
+      if(!$scope.validarNuevoParticipante()) return;
+      $scope.participantes.push({dni: $scope.nuevoParticipante.dni, apellido: $scope.nuevoParticipante.apellido, nombre: $scope.nuevoParticipante.nombre, nro: $scope.nuevoParticipante.nro});
+      guardarParticipantes();
+      $scope.ultimoParticipanteRegistrado = {dni: $scope.nuevoParticipante.dni, apellido: $scope.nuevoParticipante.apellido, nombre: $scope.nuevoParticipante.nombre, nro: $scope.nuevoParticipante.nro}
+      limpiarNuevoParticipante();
+    }
+
+    $scope.generarNuevoNroParticipante = function(){
+      $scope.nuevoParticipante.nro = obtenerNuevoNroParticipante();
+    }
+
+    obtenerNuevoNroParticipante = function(){
         var repetido = true;
         var nro = 0;
         while(repetido){
@@ -59,7 +109,7 @@ app.controller('ctrlMain', function($scope, $interval) {
         return nro;
     }
 
-    $scope.guardarParticipantes = function(){
+    guardarParticipantes = function(){
       fs.writeFile("participantes.json", JSON.stringify($scope.participantes), function(err) {
           if(err) {
               alert("ERROR guardando archivo participantes.jdon: "+err);
@@ -68,7 +118,7 @@ app.controller('ctrlMain', function($scope, $interval) {
 
     }
 
-    $scope.cargarParticipantes = function(){
+    cargarParticipantes = function(){
       fs.readFile('participantes.json', "utf8", function(err, data){
         if(err) {
             console.log("ERROR leyendo archivo participantes.json: "+err);
@@ -80,6 +130,16 @@ app.controller('ctrlMain', function($scope, $interval) {
       });
 
     }
-    $scope.cargarParticipantes();
-
+    limpiarNuevoParticipante();
+    cargarParticipantes();
+    $scope.generarNuevoNroParticipante();
 });
+
+
+var path = './';
+/*
+fs.watch(path, function() {
+    if (location)
+    location.reload();
+});
+*/

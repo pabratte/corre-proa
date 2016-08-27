@@ -1,10 +1,7 @@
 body{
-    font-size: 16px;
-    width: 80%;
-    margin-left: 10%;
-    text-align: justify;
-    font-family: sans-serif;
-    color: #333333;
+  color: #333;
+  margin-top: 70px;
+  font-size: 16px;
 }
 
 h1{
@@ -20,5 +17,20 @@ h1{
 }
 
 section {
-  border: 1px solid;
+
+}
+
+.cuad {
+  padding: 20px;
+  border-radius: 0px 0px 10px 10px;
+  border: 1px solid #ccc;
+}
+
+.cuad_title {
+  background-color: #ccc;
+  color: #fff;
+  padding: 5px;
+  padding-left: 20px;
+  border-radius: 10px 10px 0px 0px;
+  font-size: 22px;
 }
