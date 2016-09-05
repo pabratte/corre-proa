@@ -34,3 +34,15 @@ section {
   border-radius: 10px 10px 0px 0px;
   font-size: 22px;
 }
+
+.cronometro {
+  width: 100%;
+  text-align: center;
+  font-size: 60px;
+  color: #666;
+}
+
+.chrono-btn {
+  font-size: 16px;
+  font-weight: bold;
+}

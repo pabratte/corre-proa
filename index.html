@@ -22,6 +22,7 @@
             <li ng-class="{'active': pestaniaActiva==3}" ng-click="activarPestania(3)"><a href="#">Estadísticas</a></li>
         </ul>
     	</div>
+			<div class="nav navbar-nav navbar-right"><img src="img/logo.png" style="height: 50px; padding: 5px;" > </div>
 		</nav>
 		</header>
 
@@ -39,7 +40,7 @@
 						  </div>
 						</div>
 						<div class="form-group row" ng-class="{'has-error': nuevoParticipanteValido.apellido}" >
-						  <label for="apellido" class="col-md-2">Apellido </label>
+						  <label style for="apellido" class="col-md-2">Apellido </label>
 						  <div class="col-md-10">
 						    <input class="form-control" type="text" capitalize id="input-apellido" ng-model="nuevoParticipante.apellido">
 						  </div>
@@ -96,21 +97,49 @@
 
 
 		</section>
-
+<!-- SECCION MARATON -->
 		<section id="section_corre" ng-show="pestaniaActiva == 2" class="container">
-			seccion correr
-			<div class="container" >
-				<div>{{ elapsed }}</div>
-				<button type="button" class="col-xs-4 btn btn-default btn-lg" ng-click="comenzar()">Largar...</button>
-				<button type="button" class="col-xs-4 btn btn-default btn-lg" ng-click="nuevaLlegada()">Nueva Llegada</button>
+			<div class ="col-md-6">
+				<div class="cuad_title">Cronómetro</div>
+				<div class="cuad">
+					<div class="row">
+						<div class="cronometro" ng-model="elapsed">{{ elapsed }}</div>
+					</div>
+					<div class="row" style="margin: 0 auto;">
+						<button type="button" class="col-md-offset-1 chrono-btn col-md-5 btn btn-success" ng-click="comenzar()"><i class="fa fa-play" ng-show="isPaused" aria-hidden="true"></i><i class="fa fa-pause" ng-show="!isPaused" aria-hidden="true"></i><span>&nbsp&nbsp</span><span ng-show="isPaused">Comenzar!</span><span ng-show="!isPaused">Pausar</span></button>
+						<button type="button" class="col-md-offset-1 chrono-btn col-md-4 btn btn-default" ng-click="reiniciar()"><i class="fa fa-refresh" aria-hidden="true"></i><span>&nbsp&nbsp</span>Reiniciar</button>
+					</div>
+				</div>
+				<!--
+				<br>
+				<div class="cuad_title">Último Participante Registrado</div>
+				<div class="cuad">
+					<div id="ultimo_participante">
+						{{ ultimoParticipanteRegistrado !== null ? ultimoParticipanteRegistrado.apellido+ ' '+ ultimoParticipanteRegistrado.nombre +' ('+ ultimoParticipanteRegistrado.nro +')':'' }}
+					</div>
+				</div>
+				</div>
+			-->
+			<!--
+			<div class="col-md-6 lista_participantes" style="height: 100%;">
+				<div class="cuad_title">Llegadas</div>
+					<div class="cuad" style="overflow-y: auto; height: 90%;  padding: 0px;">
+						<table class="table table-striped" style="margin: 0px;">
+							<th>#</th>
+							<th>Apellido</th>
+							<th>Nombre</th>
+							<th>Número</th>
+							<tr ng-repeat="llegada in llegadas track by $index">
+								<td>{{ $index + 1}}</td>
+								<td>{{ participante.apellido }}</td>
+								<td>{{ participante.nombre }}</td>
+								<td>{{ participante.nro }}</td>
+							</tr>
+						</table>
+					</div>
+				</div>
 			</div>
-
-			<ol>
-				<li ng-repeat="llegada in llegadas">
-					<span>"{{ llegada.elapsed }}"</span>
-					<input ng-model="llegada.name"></input>
-				</li>
-			</ol>
+		-->
 		</section>
 	</body>
 </html>

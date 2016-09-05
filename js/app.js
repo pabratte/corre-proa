@@ -21,41 +21,17 @@ app.directive('capitalize', function() {
 });
 
 app.controller('ctrlMain', function($scope, $interval) {
-    $scope.llegadas = [];
+    $scope.pestaniaActiva = 1
     $scope.participantes = [];
     $scope.nuevoParticipanteValido = {nombre: true, apellido: true, dni: true};
-    $scope.horaComienzo;
-    $scope.elapsed = "--"
     $scope.ultimoParticipanteRegistrado = null;
-    $scope.pestaniaActiva = 1
 
     $scope.activarPestania = function(p){
       $scope.pestaniaActiva = p;
     }
 
 
-    $scope.comenzar = function(key){
-      horaComienzo = new Date();
-      $interval($scope.updateElapsed, 100);
-    }
 
-    $scope.updateElapsed = function(){
-      var elapsedDate = (new Date()-horaComienzo);
-      //$scope.elapsed = elapsedDate;
-      var secs = Math.floor(elapsedDate/1000);
-      if(secs<10) secs = "0"+secs;
-      var mins = Math.floor(secs/60);
-      if(mins<10) mins = "0"+mins;
-      var hours = Math.floor(mins/60);
-      if(hours<10) hours = "0"+hours;
-
-      $scope.elapsed=hours+":"+mins+":"+secs+"."+elapsedDate;
-    }
-
-    $scope.nuevaLlegada = function(){
-      $scope.llegadas.push({elapsed: $scope.elapsed, name: ''});
-      console.log($scope.llegadas)
-    }
 
     $scope.validarNuevoParticipante = function(){
       $scope.nuevoParticipanteValido.nombre = $scope.nuevoParticipanteValido.apellido = $scope.nuevoParticipanteValido.dni = false;
@@ -133,13 +109,49 @@ app.controller('ctrlMain', function($scope, $interval) {
     limpiarNuevoParticipante();
     cargarParticipantes();
     $scope.generarNuevoNroParticipante();
+
+    // CORRER
+    $scope.llegadas = [];
+    $scope.horaComienzo;
+    $scope.elapsed = "00:00:00:00";
+    $scope.isPaused = true;
+    var Timer = require('./lib/easytimer.min.js');
+    var timer = new Timer();
+
+    $scope.comenzar = function(){
+      $scope.isPaused = !$scope.isPaused;
+      if(!$scope.isPaused){
+        timer.start();
+      }else{
+        timer.pause();
+      }
+    }
+
+    $scope.reiniciar = function(){
+      timer = null;
+      timer = new Timer();
+      timer.start({precision: 'secondTenths', callback: function (values) {
+          $scope.elapsed = timer.getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths']);
+          $scope.$apply();
+        }
+      });
+      $scope.isPaused = true;
+      timer.pause();
+      $scope.elapsed = "00:00:00:00";
+    }
+    $scope.reiniciar();
+
+    $scope.nuevaLlegada = function(){
+      $scope.llegadas.push({elapsed: $scope.elapsed, name: ''});
+      console.log($scope.llegadas)
+    }
 });
 
 
-var path = './';
-/*
-fs.watch(path, function() {
-    if (location)
-    location.reload();
-});
-*/
+
+//var gulp = require('gulp');
+//gulp.task('reload', function () {
+//  if (location) location.reload();
+//});
+
+//gulp.watch('**/*', ['reload']);
