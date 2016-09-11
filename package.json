@@ -5,7 +5,7 @@
   "main": "index.html",
   "author": "pabratte",
   "window": {
-	"toolbar": true,
+	"toolbar": false,
     "width": 1000,
     "height": 600
   }

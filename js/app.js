@@ -1,4 +1,4 @@
-var app = angular.module('myApp', []);
+var app = angular.module('myApp', ['ui.bootstrap']);
 var fs = require('fs');
 
 app.directive('capitalize', function() {
@@ -85,6 +85,19 @@ app.controller('ctrlMain', function($scope, $interval) {
         return nro;
     }
 
+    $scope.obtenerParticipantes = function(filterVal){
+      filterVal = filterVal.toLowerCase();
+      var part = [];
+      for(var i = 0; i<$scope.participantes.length; i++){
+        var str = $scope.participantes[i].nombre+ ' '+$scope.participantes[i].apellido+' '+$scope.participantes[i].nro;
+        str = str.toLowerCase();
+        if(str.search(filterVal) !== -1){
+          part.push($scope.participantes[i]);
+        }
+      }
+      return part;
+    }
+
     guardarParticipantes = function(){
       fs.writeFile("participantes.json", JSON.stringify($scope.participantes), function(err) {
           if(err) {
@@ -110,7 +123,8 @@ app.controller('ctrlMain', function($scope, $interval) {
     cargarParticipantes();
     $scope.generarNuevoNroParticipante();
 
-    // CORRER
+    // --------------- CORRER -----------------
+    $scope.ultimasLlegadas = [];
     $scope.llegadas = [];
     $scope.horaComienzo;
     $scope.elapsed = "00:00:00:00";
@@ -142,9 +156,23 @@ app.controller('ctrlMain', function($scope, $interval) {
     $scope.reiniciar();
 
     $scope.nuevaLlegada = function(){
-      $scope.llegadas.push({elapsed: $scope.elapsed, name: ''});
-      console.log($scope.llegadas)
+      if($scope.isPaused) return;
+      var llegada = {tiempo: $scope.elapsed, participante: '', pos: 0, foto: ''};
+      llegada.pos = $scope.llegadas.length + $scope.ultimasLlegadas.length + 1;
+      $scope.ultimasLlegadas.push(llegada);
     }
+
+    $scope.agregarLlegada = function (pos, tiempo, participante){
+      $scope.llegadas.push({pos: pos, tiempo: tiempo, participante: participante});
+      // eliminar ese elemento de ultimasLlegadas
+      for(var i = 0; i<$scope.ultimasLlegadas.length; i++){
+        if($scope.ultimasLlegadas[i].pos == pos){
+          $scope.ultimasLlegadas.splice(i,1);
+          break;
+        }
+      }
+    }
+
 });
 
 
