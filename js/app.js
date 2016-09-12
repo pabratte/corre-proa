@@ -1,5 +1,6 @@
 var app = angular.module('myApp', ['ui.bootstrap']);
 var fs = require('fs');
+var Webcam = require('./lib/webcam.min.js')
 
 app.directive('capitalize', function() {
    return {
@@ -83,6 +84,14 @@ app.controller('ctrlMain', function($scope, $interval) {
           }
         }
         return nro;
+    }
+
+    $scope.eliminar_participante = function(participante){
+      for(var i = 0; i<$scope.participantes.length; i++){
+        if($scope.participantes[i] === participante){
+          $scope.participantes.splice(i,1);
+        }
+      }
     }
 
     $scope.obtenerParticipantes = function(filterVal){
@@ -171,10 +180,31 @@ app.controller('ctrlMain', function($scope, $interval) {
           break;
         }
       }
+      guardarLlegadas();
     }
 
-});
+    guardarLlegadas = function(){
+      fs.writeFile("llegadas.json", JSON.stringify($scope.llegadas), function(err) {
+          if(err) {
+              alert("ERROR guardando archivo llegadas.jdon: "+err);
+          }
+      });
 
+    }
+
+    cargarLlegadas = function(){
+      fs.readFile('llegadas.json', "utf8", function(err, data){
+        if(err) {
+            console.log("ERROR leyendo archivo llegadas.json: "+err);
+            $scope.llegadas = [];
+        }else{
+            $scope.llegadas = JSON.parse(data);
+        }
+        $scope.$apply();
+      });
+    }
+    cargarLlegadas();
+});
 
 
 //var gulp = require('gulp');
