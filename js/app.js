@@ -1,6 +1,6 @@
 var app = angular.module('myApp', ['ui.bootstrap']);
 var fs = require('fs');
-var Webcam = require('./lib/webcam.min.js')
+//var Webcam = require('./lib/webcam.min.js')
 
 app.directive('capitalize', function() {
    return {
@@ -24,7 +24,7 @@ app.directive('capitalize', function() {
 app.controller('ctrlMain', function($scope, $interval) {
     $scope.pestaniaActiva = 1
     $scope.participantes = [];
-    $scope.nuevoParticipanteValido = {nombre: true, apellido: true, dni: true};
+    $scope.nuevoParticipanteValido = {nombre: true, apellido: true, dni: true, categoria: 0};
     $scope.ultimoParticipanteRegistrado = null;
 
     $scope.activarPestania = function(p){
@@ -35,7 +35,7 @@ app.controller('ctrlMain', function($scope, $interval) {
 
 
     $scope.validarNuevoParticipante = function(){
-      $scope.nuevoParticipanteValido.nombre = $scope.nuevoParticipanteValido.apellido = $scope.nuevoParticipanteValido.dni = false;
+      $scope.nuevoParticipanteValido.nombre = $scope.nuevoParticipanteValido.categoria = $scope.nuevoParticipanteValido.apellido = $scope.nuevoParticipanteValido.dni = false;
 
       if($scope.nuevoParticipante.apellido === ''){
         $scope.nuevoParticipanteValido.apellido = true;
@@ -43,6 +43,9 @@ app.controller('ctrlMain', function($scope, $interval) {
       }else if($scope.nuevoParticipante.nombre === ''){
         $scope.nuevoParticipanteValido.nombre = true;
         return false;
+      }else if($scope.nuevoParticipante.categoria === 0 || $scope.nuevoParticipante.categoria === undefined){
+          $scope.nuevoParticipanteValido.categoria = true;
+          return false;
       }else if($scope.nuevoParticipante.dni === ''){
         $scope.nuevoParticipanteValido.dni = true;
         return false;
@@ -53,16 +56,16 @@ app.controller('ctrlMain', function($scope, $interval) {
     }
 
     limpiarNuevoParticipante = function(){
-      $scope.nuevoParticipante = {apellido: '', nombre: '', dni: ''};
+      $scope.nuevoParticipante = {apellido: '', nombre: '', dni: '', categoria: 0};
       $scope.generarNuevoNroParticipante();
-      $scope.nuevoParticipanteValido.nombre = $scope.nuevoParticipanteValido.apellido = $scope.nuevoParticipanteValido.dni = false;
+      $scope.nuevoParticipanteValido.nombre = $scope.nuevoParticipanteValido.apellido = $scope.nuevoParticipanteValido.dni = $scope.nuevoParticipanteValido.categoria = false;
     }
 
     $scope.agregarParticipante = function(){
       if(!$scope.validarNuevoParticipante()) return;
-      $scope.participantes.push({dni: $scope.nuevoParticipante.dni, apellido: $scope.nuevoParticipante.apellido, nombre: $scope.nuevoParticipante.nombre, nro: $scope.nuevoParticipante.nro});
+      $scope.participantes.push({dni: $scope.nuevoParticipante.dni, apellido: $scope.nuevoParticipante.apellido, nombre: $scope.nuevoParticipante.nombre, nro: $scope.nuevoParticipante.nro, categoria: $scope.nuevoParticipante.categoria});
       guardarParticipantes();
-      $scope.ultimoParticipanteRegistrado = {dni: $scope.nuevoParticipante.dni, apellido: $scope.nuevoParticipante.apellido, nombre: $scope.nuevoParticipante.nombre, nro: $scope.nuevoParticipante.nro}
+      $scope.ultimoParticipanteRegistrado = {dni: $scope.nuevoParticipante.dni, apellido: $scope.nuevoParticipante.apellido, nombre: $scope.nuevoParticipante.nombre, nro: $scope.nuevoParticipante.nro, categoria: $scope.nuevoParticipante.categoria}
       limpiarNuevoParticipante();
     }
 

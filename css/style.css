@@ -46,3 +46,16 @@ section {
   font-size: 16px;
   font-weight: bold;
 }
+
+.categoria{
+  padding: 5px;
+  border-radius: 3px;
+}
+
+.participante{
+  background-color: lightgreen;
+}
+
+.competidor{
+  background-color: orange;
+}

@@ -33,29 +33,39 @@
 				<div class="cuad">
 					<form class="form">
 						<div class="form-group row">
-						  <label class="col-md-2 col-form-label">Número </label>
-						  <div class="col-md-10">
+						  <label class="col-md-3 col-form-label">Número </label>
+						  <div class="col-md-9">
 								<span >{{ nuevoParticipante.nro }}</span>
 								<button type="button" ng-click="generarNuevoNroParticipante()" class="btn btn-default pull-right"><i class="fa fa-refresh" aria-hidden="true"></i>
 </button>
 						  </div>
 						</div>
 						<div class="form-group row" ng-class="{'has-error': nuevoParticipanteValido.apellido}" >
-						  <label style for="apellido" class="col-md-2">Apellido </label>
-						  <div class="col-md-10">
+						  <label style for="apellido" class="col-md-3">Apellido </label>
+						  <div class="col-md-9">
 						    <input class="form-control" type="text" capitalize id="input-apellido" ng-model="nuevoParticipante.apellido">
 						  </div>
 						</div>
 						<div class="form-group row" ng-class="{'has-error': nuevoParticipanteValido.nombre}" >
-							<label for="apellido" class="col-md-2 col-form-label">Nombre </label>
-						  <div class="col-md-10">
+							<label for="apellido" class="col-md-3 col-form-label">Nombre </label>
+						  <div class="col-md-9">
 						    <input class="form-control" type="text" capitalize id="input-nombre" ng-model="nuevoParticipante.nombre">
 						  </div>
 						</div>
 
+						<div class="form-group row" ng-class="{'has-error': nuevoParticipanteValido.categoria}" >
+							<label for="categoria" class="col-md-3 col-form-label">Categoría </label>
+						  <div class="col-md-9">
+						    <select class="form-control" type="text" id="input-categoria" ng-model="nuevoParticipante.categoria">
+									<option value="1">Participante (3K)</option>
+									<option value="2">Competidor (6K)</option>
+								<select>
+							</div>
+						</div>
+
 						<div class="form-group row" ng-class="{'has-error': nuevoParticipanteValido.dni}" >
-						  <label for="apellido" class="col-md-2 col-form-label">DNI </label>
-						  <div class="col-md-10">
+						  <label for="apellido" class="col-md-3 col-form-label">DNI </label>
+						  <div class="col-md-9">
 						    <input class="form-control" type="text" id="input-dni" ng-model="nuevoParticipante.dni">
 						  </div>
 						</div>
@@ -84,12 +94,14 @@
 							<th>#</th>
 							<th>Apellido</th>
 							<th>Nombre</th>
+							<th>Cat</th>
 							<th>Número</th>
 							<th></th>
 							<tr ng-repeat="participante in participantes track by $index">
 								<td>{{ $index + 1}}</td>
 								<td>{{ participante.apellido }}</td>
 								<td>{{ participante.nombre }}</td>
+								<td><span class="categoria" ng-class="{'participante': participante.categoria==1, 'competidor': participante.categoria==2}">{{ participante.categoria == 1?'3KM':'6KM' }}</span></td>
 								<td>{{ participante.nro }}</td>
 								<td style="padding: 5px;"><button type="button" title="Eliminar" class="btn btn-default" ng-click="eliminar_participante(participante)"><i class="fa fa-remove" aria-hidden="true"></i></button></td>
 							</tr>
@@ -147,11 +159,14 @@
 							<th>Tiempo</th>
 							<th>Participante</th>
 							<th>Nro</th>
-							<tr ng-repeat="llegada in llegadas | orderBy: 'pos'">
+							<th>Cat</th>
+							<!--| filter:{ participante.categoria: '1' }-->
+							<tr ng-repeat="llegada in llegadas | orderBy: 'pos' ">
 								<td>{{ llegada.pos}}</td>
 								<td>{{ llegada.tiempo }}</td>
 								<td>{{ llegada.participante.apellido + ' ' + llegada.participante.nombre}}</td>
 								<td>{{ llegada.participante.nro}}</td>
+								<td><span class="categoria" ng-class="{'participante': llegada.participante.categoria==1, 'competidor': llegada.participante.categoria==2}">{{ llegada.participante.categoria == 1?'3KM':'6KM' }}</span></td>
 							</tr>
 						</table>
 					</div>
