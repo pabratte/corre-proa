@@ -26,6 +26,8 @@ app.controller('ctrlMain', function($scope, $interval) {
     $scope.participantes = [];
     $scope.nuevoParticipanteValido = {nombre: true, apellido: true, dni: true, categoria: 0};
     $scope.ultimoParticipanteRegistrado = null;
+    $scope.filtroCategoria = {categoria: 0};
+    $scope.filtroCategoria_llegada = {participante: {categoria: 0}};
 
     $scope.activarPestania = function(p){
       $scope.pestaniaActiva = p;
@@ -95,6 +97,7 @@ app.controller('ctrlMain', function($scope, $interval) {
           $scope.participantes.splice(i,1);
         }
       }
+      guardarParticipantes();
     }
 
     $scope.obtenerParticipantes = function(filterVal){

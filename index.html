@@ -59,7 +59,7 @@
 						    <select class="form-control" type="text" id="input-categoria" ng-model="nuevoParticipante.categoria">
 									<option value="1">Participante (3K)</option>
 									<option value="2">Competidor (6K)</option>
-								<select>
+								</select>
 							</div>
 						</div>
 
@@ -88,7 +88,16 @@
 
 
 			<div class="col-md-6 lista_participantes" style="height: 100%;">
-				<div class="cuad_title">Lista de participantes</div>
+				<div class="cuad_title">
+					<div class="row" style="margin: 0px; padding: 0px;">
+						<span class="col-md-7">Lista de participantes</span>
+						<span class="col-md-5"><select class="form-control" type="text" id="input-categoria" ng-model="filtroCategoria.categoria">
+							<option value="0" selected>Todos</option>
+							<option value="1">Participante (3K)</option>
+							<option value="2">Competidor (6K)</option>
+						</select></span>
+					</div>
+				</div>
 					<div class="cuad" style="overflow-y: auto; height: 90%;  padding: 0px;">
 						<table class="table table-striped" style="margin: 0px;">
 							<th>#</th>
@@ -97,8 +106,8 @@
 							<th>Cat</th>
 							<th>Número</th>
 							<th></th>
-							<tr ng-repeat="participante in participantes track by $index">
-								<td>{{ $index + 1}}</td>
+							<tr ng-repeat="participante in participantes | filter: (filtroCategoria.categoria != 0 || '') && filtroCategoria track by $index">
+								<td>{{ $index + 1 }}</td>
 								<td>{{ participante.apellido }}</td>
 								<td>{{ participante.nombre }}</td>
 								<td><span class="categoria" ng-class="{'participante': participante.categoria==1, 'competidor': participante.categoria==2}">{{ participante.categoria == 1?'3KM':'6KM' }}</span></td>
@@ -152,7 +161,16 @@
 
 
 			<div class="col-md-6 lista_participantes" style="height: 100%;">
-				<div class="cuad_title">Llegadas</div>
+				<div class="cuad_title">
+					<div class="row" style="margin: 0px; padding: 0px;">
+						<span class="col-md-7">Llegadas</span>
+						<span class="col-md-5"><select class="form-control" type="text" id="input-categoria" ng-model="filtroCategoria_llegada.participante.categoria">
+							<option value="0" selected>Todos</option>
+							<option value="1">Participante (3K)</option>
+							<option value="2">Competidor (6K)</option>
+						</select></span>
+					</div>
+				</div>
 					<div class="cuad" style="overflow-y: auto; height: 90%;  padding: 0px;">
 						<table class="table table-striped" style="margin: 0px;">
 							<th>#</th>
@@ -160,8 +178,7 @@
 							<th>Participante</th>
 							<th>Nro</th>
 							<th>Cat</th>
-							<!--| filter:{ participante.categoria: '1' }-->
-							<tr ng-repeat="llegada in llegadas | orderBy: 'pos' ">
+							<tr ng-repeat="llegada in llegadas | filter: (filtroCategoria_llegada.participante.categoria != 0 || '') && filtroCategoria_llegada | orderBy: 'pos'">
 								<td>{{ llegada.pos}}</td>
 								<td>{{ llegada.tiempo }}</td>
 								<td>{{ llegada.participante.apellido + ' ' + llegada.participante.nombre}}</td>
@@ -215,7 +232,7 @@
 			</div>
 
 			<script>
-				Webcam.set({
+				/*Webcam.set({
 							width: 640,
 							height: 480,
 							image_format: 'jpeg',
@@ -237,14 +254,8 @@
 			              alert("ERROR guardando archivo foto.jpeg: "+err);
 			          }
 			      });
-						/*fs.writeFile("foto.jpeg", data_uri, function(err) {
-			          if(err) {
-			              alert("ERROR guardando archivo foto.jpeg: "+err);
-			          }
-			      });*/
 				  });
-
-			}
+			}*/
 			</script>
 			<input type=button value="Take Snapshot" onClick="take_snapshot()"></input>
 			<div id="results">Your captured image will appear here...</div>
